@@ -1,0 +1,54 @@
+# پوشه محیط مجازی (مثلاً venv یا env)
+venv/
+env/
+ENV/
+.venv/
+
+# فایل‌های مربوط به Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# فایل‌های SQLite دیتابیس
+*.sqlite3
+
+# فایل‌های مربوط به Django migration که auto-generated هستن (اختیاری)
+**/migrations/__pycache__/
+**/migrations/*.pyc
+# اگر می‌خوای migrationها رو هم نادیده بگیری:
+# **/migrations/
+
+# فایل‌های تنظیمات شخصی IDE ها
+.vscode/
+.idea/
+
+# فایل‌های OS
+.DS_Store
+Thumbs.db
+
+# پوشه media (در صورت استفاده از فایل‌های آپلود شده)
+media/
+
+# فایل‌های تست coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# فایل‌های لاگ و debug
+*.log
+
+# فایل‌های مربوط به build
+build/
+dist/
+*.egg-info/
+
+# dotenv / فایل‌های مخفی حاوی رمزها
+.env
+.env.*
+
+# تنظیمات Gunicorn یا uWSGI (در صورت استفاده)
+*.pid
+
+# فایل‌های static که جمع‌آوری شدن (collectstatic)
+staticfiles/
+static/

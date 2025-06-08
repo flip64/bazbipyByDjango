@@ -1,8 +1,36 @@
-from django.shortcuts import render
+from django.shortcuts import render ,redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import WatchedURL
 import json
+from .models import WatchedURL
+from .forms import WatchedURLForm
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def watched_urls_view(request):
+    user = request.user
+    if request.method == 'POST':
+        form = WatchedURLForm(request.POST)
+        if form.is_valid():
+            watched_url = form.save(commit=False)
+            watched_url.user = user
+            watched_url.save()
+            return redirect('watched_urls')  # نام مسیر را مطابق urls.py تنظیم کن
+    else:
+        form = WatchedURLForm()
+
+    urls = WatchedURL.objects.filter(user=user).order_by('-created_at')
+
+    return render(request, 'tracker/watched_urls.html', {'form': form, 'urls': urls})
+
+
+
+
+
+
+
+
 
 @csrf_exempt
 def check_price(request):

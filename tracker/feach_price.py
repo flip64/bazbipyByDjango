@@ -32,5 +32,6 @@ def fetch_product_details(url):
         print("نام محصول یافت نشد.")
     elif not product_price:
         print("قیمت محصول یافت نشد.")
-
+    
     return product_name, product_price
+

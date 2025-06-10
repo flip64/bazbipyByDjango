@@ -138,3 +138,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# settings.py
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'scrape-every-hour': {
+        'task': 'tracker.tasks.scrape_product',
+        'schedule': 3600.0,  # هر 3600 ثانیه (1 ساعت)
+    },
+}

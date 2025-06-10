@@ -26,6 +26,9 @@
         <td><a href="{{ url.url }}" target="_blank">{{ url.url }}</a></td>
         <td>{{ url.last_price|default:"-" }}</td>
         <td>{{ url.last_checked|date:"Y-m-d H:i" }}</td>
+
+
+        
     </tr>
     {% empty %}
     <tr>

@@ -12,8 +12,8 @@ build/
 *.log
 
 # Virtualenv
-env/
 .env
+.env.*
 venv/
 ENV/
 env.bak/

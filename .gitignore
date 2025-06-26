@@ -13,6 +13,7 @@ build/
 
 # Virtualenv
 env/
+.env
 venv/
 ENV/
 env.bak/

@@ -1,0 +1,1 @@
+curl -X post http://127.0.0.1:8000/tracker/check_price/ -H "Content-Type: application/json" -d '{"url":"https://pakhshabdi.com/product/%d8%b3%d8%aa-%d8%ac%d8%a7-%d8%a7%d8%af%d9%88%db%8c%d9%87-4-%d8%b9%d8%af%d8%af%db%8c-%d8%aa%d8%a7%db%8c%d9%84%d9%86%d8%af%db%8c-%d8%a8%d8%a7%d8%b2%d9%86/"}'

@@ -9,8 +9,20 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+from celery.schedules import crontab 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+
+
+
+# بارگذاری متغیرهای محیطی
+load_dotenv()
+
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +49,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tracker'
+    'django_crontab',
+    'tracker',
+    'django_celery_beat',  # برای مدیریت تسک‌های دوره‌ای
+    'django_celery_results',  # اختیاری برای ذخیره نتایج
+
+
+
 ]
 
 MIDDLEWARE = [
@@ -145,6 +163,31 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     'scrape-every-hour': {
         'task': 'tracker.tasks.scrape_product',
-        'schedule': 3600.0,  # هر 3600 ثانیه (1 ساعت)
+        'schedule': 3.0,  # هر 3600 ثانیه (1 ساعت)
     },
 }
+
+
+# در فایل settings.py
+CELERY_BEAT_SCHEDULE = {
+    'check-prices-every-hour': {
+        'task': 'app.tasks.periodic_price_check',
+        'schedule': crontab(minute=0),  # هر ساعت یکبار
+    },
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # یا آدرس بروکر شما
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = 'Asia/Tehran'
+
+
+# تنظیمات SMTP برای Gmail
+
+# تنظیمات ایمیل
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'True'  # تبدیل به boolean
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')

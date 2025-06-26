@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'tracker/base.html' %}
 
 {% block content %}
 <h2>ثبت لینک جدید</h2>
@@ -19,6 +19,7 @@
         <th>لینک</th>
         <th>آخرین قیمت</th>
         <th>آخرین بررسی</th>
+        <th>  </th>
     </tr>
     {% for url in urls %}
     <tr>
@@ -26,6 +27,9 @@
         <td><a href="{{ url.url }}" target="_blank">{{ url.url }}</a></td>
         <td>{{ url.last_price|default:"-" }}</td>
         <td>{{ url.last_checked|date:"Y-m-d H:i" }}</td>
+        <td><a href="../delet/{{url.id}} " style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-align: center; text-decoration: none; border-radius: 5px;"> حذف  </a>
+</td>
+        
     </tr>
     {% empty %}
     <tr>

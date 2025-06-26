@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import WatchedURL, PriceHistory
 from .forms import WatchedURLForm
 from django.contrib.auth.decorators import login_required
-from tracker.feach_price import fetch_product_details
+from tracker.utils.feach_price import fetch_product_details,send_price_alert
 from django.utils import timezone
 
 import re
@@ -27,7 +27,7 @@ def watched_urls_view(request):
             cleaned_price = clean_price_text(product_price_text)
             if cleaned_price is not None:
                 watched_url.last_price = cleaned_price
-                watched_url.last_checked = timezone.now()  # این خط رو اضافه کن
+                watched_url.last_checked = timezone.now() 
 
 
             watched_url.save()
@@ -44,8 +44,7 @@ def watched_urls_view(request):
         form = WatchedURLForm(user=user)  # پاس دادن user به فرم
 
     urls = WatchedURL.objects.filter(user=user).order_by('-created_at')
-    for watched_url in urls:
-        print(watched_url.product_name)
+    
 
     return render(request, 'tracker/watched_urls.html', {'form': form, 'urls': urls})
 
@@ -65,8 +64,8 @@ def check_price(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         url = data.get('url')
-        new_price = data.get('price')  # فرضاً فرانت اینو می‌فرسته
-
+        name , new_price = fetch_product_details(url) 
+        new_price = clean_price_text(new_price) 
         try:
             # اگر می‌خوای بررسی کاربر هم باشه باید user رو از request بدست بیاری (اگر احراز هویت هست)
             watched = WatchedURL.objects.get(url=url)
@@ -79,3 +78,61 @@ def check_price(request):
             return JsonResponse({'error': 'URL not found'}, status=404)
 
     return JsonResponse({'error': 'Invalid method'}, status=405)
+
+
+def delet(request , id):
+   url = WatchedURL.objects.get(id=id)
+   url.delete()
+   return redirect('/tracker/watched_urls/')
+ 
+def check_price_all(request):
+    list_url = []
+    wached_urls = WatchedURL.objects.all()
+    for waching in wached_urls:
+       name , price =fetch_product_details(waching.url)
+       price = clean_price_text(price)
+       if price != waching.last_price :
+           change = 'chanjed'
+       else :
+           change ='not chanjed'
+
+
+       status = {
+         "name"     : name ,
+         "url"      : waching.url,
+         "change"   : change,
+         "price"    : price , 
+         "lastcheck": waching.last_checked
+       } 
+       list_url.append(status)
+    
+
+    return JsonResponse(list_url , safe=False ) 
+
+def change_price_all(request):
+    list_url = []
+    wached_urls = WatchedURL.objects.all()
+    for waching in wached_urls:
+       name , price =fetch_product_details(waching.url)
+       price = clean_price_text(price)
+       if price != waching.last_price :
+           send_price_alert(name,price,waching.last_price)
+           waching.last_price = price
+           waching.save()
+           PriceHistory.objects.create(watched_url=waching,price=price)
+           change = 'chanjed'
+       else :
+           change ='not chanjed'
+
+
+       status = {
+         "change"   : change,
+         "lastcheck": waching.last_checked , 
+         "price"    : price
+       } 
+       list_url.append(status)
+    
+
+    return JsonResponse(list_url , safe=False ) 
+
+

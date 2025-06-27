@@ -3,7 +3,7 @@ asgiref==3.8.1
 async-timeout==5.0.1
 beautifulsoup4==4.13.4
 billiard==4.2.1
-celery==5.5.3
+
 certifi==2025.4.26
 charset-normalizer==3.4.2
 click==8.2.1
@@ -15,7 +15,7 @@ Django==5.2.2
 django-celery-beat==2.8.1
 django-crontab==0.7.1
 django-timezone-field==7.1
-django_celery_results==2.6.0
+
 idna==3.10
 kombu==5.5.4
 packaging==25.0
@@ -23,7 +23,7 @@ prompt_toolkit==3.0.51
 python-crontab==3.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
-redis==6.2.0
+
 requests==2.32.3
 six==1.17.0
 soupsieve==2.7

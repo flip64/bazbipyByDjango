@@ -54,9 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_crontab',
     'tracker',
-    'django_celery_beat',  # برای مدیریت تسک‌های دوره‌ای
-    'django_celery_results',  # اختیاری برای ذخیره نتایج
-
+   
 
 
 ]
@@ -160,28 +158,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# settings.py
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_BEAT_SCHEDULE = {
-    'scrape-every-hour': {
-        'task': 'tracker.tasks.scrape_product',
-        'schedule': 3.0,  # هر 3600 ثانیه (1 ساعت)
-    },
-}
 
 
-# در فایل settings.py
-CELERY_BEAT_SCHEDULE = {
-    'check-prices-every-hour': {
-        'task': 'app.tasks.periodic_price_check',
-        'schedule': crontab(minute=0),  # هر ساعت یکبار
-    },
-}
-
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # یا آدرس بروکر شما
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_TIMEZONE = 'Asia/Tehran'
 
 
 # تنظیمات SMTP برای Gmail

@@ -15,6 +15,13 @@ def send_price_alert(name , new_price, old_price):
         watched_url: شیء WatchedURL
         new_price: قیمت جدید
     """
+    send_status = {
+        "email" :  "not send",
+        "telegram" : "not send",
+        "notification" : "not send",
+        "consol_print ": "not send"
+    }
+    
     # محاسبه درصد تغییر
     change_percent = 0
     if old_price and old_price > 0:
@@ -30,8 +37,8 @@ def send_price_alert(name , new_price, old_price):
 
     # اینجا می‌توانید روش‌های مختلف ارسال هشدار را پیاده‌سازی کنید
 
-    print(message)
-    send_email_view(message)     # - ارسال ایمیل
+    #    print(message)
+    send_email_status = send_email_view(message)     # - ارسال ایمیل
 
     # مثلاً:
     # - ارسال نوتیفیکیشن درون‌برنامه‌ای
@@ -42,7 +49,9 @@ def send_price_alert(name , new_price, old_price):
     # مثال ارسال به تلگرام:
     # send_telegram_alert(user.telegram_chat_id, message)
 
+    send_status["email"] = send_email_status
 
+    return send_status
 
 def send_email_view(message):
     send_mail(

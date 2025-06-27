@@ -116,19 +116,28 @@ def change_price_all(request):
        name , price =fetch_product_details(waching.url)
        price = clean_price_text(price)
        if price != waching.last_price :
-           send_price_alert(name,price,waching.last_price)
+           
+           send_status = send_price_alert(name,price,waching.last_price)
+           if(send_status) : 
+               send_status_email= send_status['email']
+           else: 
+               send_status_email = 'not send email' 
+           
            waching.last_price = price
            waching.save()
            PriceHistory.objects.create(watched_url=waching,price=price)
            change = 'chanjed'
        else :
            change ='not chanjed'
+           send_status_email = 'not changed'
 
 
        status = {
+         "name"   : name,
          "change"   : change,
          "lastcheck": waching.last_checked , 
-         "price"    : price
+         "price"    : price ,
+         "sendemail_status" : send_status_email
        } 
        list_url.append(status)
     

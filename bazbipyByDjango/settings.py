@@ -41,6 +41,9 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.1.36',  
+    'bazbipybydjango_web_1',
+    'web',
+     '*',
 ]
 
 # Application definition

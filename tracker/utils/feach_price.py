@@ -83,12 +83,17 @@ def fetch_product_details(url):
     name_tag = soup.find("h1", class_="product_title")
     product_name = name_tag.text.strip() if name_tag else None
 
-    # جستجوی چندگانه برای کلاس‌های ممکن قیمت
-    price_tag = soup.find("span", class_="woocommerce-Price-amount amount")
-    if not price_tag:
-        price_tag = soup.find("span", class_="woocommerce-Price-amount")
 
-    product_price = price_tag.text.strip() if price_tag else None
+
+    # جستجوی چندگانه برای کلاس‌های ممکن قیمت
+    if "ناموجود" in soup.text or "تمام شد" in soup.text:
+       product_price = "0"
+    else:   
+      price_tag = soup.find("span", class_="woocommerce-Price-amount amount")
+      if not price_tag:
+        price_tag = soup.find("span", class_="woocommerce-Price-amount")
+      product_price = price_tag.text.strip() if price_tag else None
+ 
 
     if not product_name and not product_price:
         print("نام و قیمت محصول یافت نشد.")
@@ -97,6 +102,7 @@ def fetch_product_details(url):
     elif not product_price:
         print("قیمت محصول یافت نشد.")
     
+
     return product_name, product_price
 
 
